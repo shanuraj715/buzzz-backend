@@ -1,0 +1,4 @@
+{
+    "DATABASE_URL": "mongodb+srv://shanuraj715:shanuraj715@buzzz.mhusf.mongodb.net/buzzz?retryWrites=true&w=majority",
+    "APP_PORT": 5000
+}

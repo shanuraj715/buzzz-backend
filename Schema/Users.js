@@ -19,12 +19,18 @@ const schema = new mongoose.Schema({
         minLength: 6,
         mxLength: 32
     },
+    designation: {
+        type: String,
+    },
+    gender: {
+        type: String,
+    },
     email: {
         type: String,
         unique: true
     },
     birthday: {
-        type: Date
+        type: String
     },
     website: {
         type: String

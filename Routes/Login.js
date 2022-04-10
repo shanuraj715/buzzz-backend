@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const userModel = require('../Model/User')
 const auth = require('../Controller/Auth')
+const userModel = require('../Model/User')
 
 router.post('/', async (req, res, next) => {
     const { username, password } = req.body
@@ -11,22 +11,25 @@ router.post('/', async (req, res, next) => {
             .json({ message: 'Invalid Username or Password' })
         return
     }
-    const { email } = result
+    const { email, _id } = result
 
     // SIGN TOKEN
     const token = auth.sign({
         username: username,
-        email: email
+        email: email,
+        uid: _id
     })
-
     res
         .set({ "x-auth-token": token, "Access-Control-Expose-Headers": "x-auth-token" })
+        .cookie("authToken", token)
+        .cookie('uid', _id)
         .json({
             status: true,
             message: "Successfully logged in.",
             data: {
                 email: email,
-                username: username
+                username: username,
+                uid: _id
             }
         })
     return

@@ -8,11 +8,11 @@ var allowedDomains = [
 module.exports = function (req, callback) {
     var corsOptions;
     if (allowedDomains.length === 0) {
-        corsOptions = { origin: true }
+        corsOptions = { origin: true, credentials: true, }
     }
     else {
         if (allowedDomains.indexOf(req.header('Origin')) !== -1) {
-            corsOptions = { origin: true } // reflect (enable) the requested origin in the CORS response
+            corsOptions = { origin: true, credentials: true, } // reflect (enable) the requested origin in the CORS response
         } else {
             corsOptions = { origin: false } // disable CORS for this request
         }

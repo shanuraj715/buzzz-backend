@@ -63,7 +63,7 @@ router.get('/:uid', authenticate, async function (req, res) {
     }
     else {
         res.json({ status: false, message: "Invalid request" })
-        log("babu error aa gya")
+        log("error aa gya")
     }
 })
 

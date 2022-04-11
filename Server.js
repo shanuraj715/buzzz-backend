@@ -28,7 +28,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 const profile = require('./Routes/Profile')
 const login = require('./Routes/Login')
 const register = require('./Routes/Register')
-const feeds = require('./Routes/Post')
+const feeds = require('./Routes/Feeds')
 
 app.use('/profile', profile)
 app.use('/login', login)

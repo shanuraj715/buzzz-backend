@@ -62,6 +62,9 @@ const schema = new mongoose.Schema({
         minLength: 8,
         maxLength: 1024,
         isRequired: true
+    },
+    friends: {
+        type: Array
     }
 })
 

@@ -46,8 +46,8 @@ router.post('/', validateData, async (req, res, next) => {
     const { fname, lname, email, password, username } = req.body
 
     const obj = {
-        fname: fname,
-        lname: lname,
+        firstName: fname,
+        lastName: lname,
         email: email,
         username: username,
         password: password

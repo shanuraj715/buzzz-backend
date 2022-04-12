@@ -10,7 +10,7 @@ const schema = new mongoose.Schema({
     },
     lastName: {
         type: String,
-        minLength: 6,
+        minLength: 0,
         maxLength: 32
     },
     username: {
@@ -65,6 +65,15 @@ const schema = new mongoose.Schema({
     },
     friends: {
         type: Array
+    },
+    requests: {
+        type: Array
+    },
+    image: {
+        type: String
+    },
+    cover: {
+        type: String
     }
 })
 

@@ -1,8 +1,10 @@
 require('express-async-errors')
-
+console.clear()
 // GLOBAL METHODS
 require('./Controller/Globals')
-const app = require('express')()
+const express = require('express')
+const app = express()
+const fileUpload = require('express-fileupload')
 const bodyParser = require('body-parser')
 const config = require('config')
 const cors = require('cors')
@@ -19,21 +21,26 @@ const error = require('./middleware/error')
 require('./Controller/Database')()
 
 app.use(cors(require('./Controller/HandleCors')))
-
 // PARSE BODY IN JSON
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(fileUpload())
+app.use('/public', express.static('./public'))
 
 // APP ROUTES
 const profile = require('./Routes/Profile')
 const login = require('./Routes/Login')
 const register = require('./Routes/Register')
 const feeds = require('./Routes/Feeds')
+const session = require('./Routes/Session')
+const friend = require('./Routes/Friend')
 
 app.use('/profile', profile)
 app.use('/login', login)
 app.use('/register', register)
-app.use('/feeds',feeds)
+app.use('/feeds', feeds)
+app.use('/session', session)
+app.use('/friend', friend)
 
 
 

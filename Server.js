@@ -4,11 +4,11 @@ console.clear()
 require('./Controller/Globals')
 const express = require('express')
 const app = express()
-const fileUpload = require('express-fileupload')
+
 const bodyParser = require('body-parser')
 const config = require('config')
 const cors = require('cors')
-
+const fileUpload = require('express-fileupload')
 
 
 

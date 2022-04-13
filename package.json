@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "Buzzz App Backend",
   "main": "Server.js",
+  "type": "module",
   "scripts": {
-    "start": "nodemon Server.js"
+    "start": "node Server.js",
+    "nm": "nodemon Server.js"
   },
   "author": "shanuraj715",
   "license": "ISC",

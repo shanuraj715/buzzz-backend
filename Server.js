@@ -34,6 +34,7 @@ const register = require('./Routes/Register')
 const feeds = require('./Routes/Feeds')
 const session = require('./Routes/Session')
 const friend = require('./Routes/Friend')
+const search = require('./Routes/Search')
 
 app.use('/profile', profile)
 app.use('/login', login)
@@ -41,6 +42,7 @@ app.use('/register', register)
 app.use('/feeds', feeds)
 app.use('/session', session)
 app.use('/friend', friend)
+app.use('/search', search)
 
 
 

@@ -6,6 +6,7 @@ const fs = require('fs')
 const authenticate = require('../middleware/authenticate')
 
 const UserModel = require('../Model/User');
+const FeedModel = require('../Model/Feed')
 const config = require('config')
 
 const router = express.Router()
@@ -60,6 +61,10 @@ router.get('/:uid', authenticate, async function (req, res) {
             isFriend = true
         }
     }
+
+    const postsCount = await FeedModel.find({ userId: userId }).count()
+
+
     if (result) {
         const { firstName, lastName, designation, website, gender, birthday, city, state, zip, image, cover } = result
         res.json({
@@ -79,7 +84,8 @@ router.get('/:uid', authenticate, async function (req, res) {
                 zip: zip ?? "",
                 profileImage: image ? config.get("APP_DOMAIN") + "public/images/profile-pic/" + image : config.get("APP_DOMAIN") + "public/images/images.png",
                 profileCover: cover ?? "",
-                isFriend: isFriend
+                isFriend: isFriend,
+                postCount: postsCount
             }
         })
         return

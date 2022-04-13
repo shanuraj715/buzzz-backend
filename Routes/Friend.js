@@ -34,7 +34,7 @@ router.get("/list/:type", authenticate, async (req, res) => {
             username: item.username,
             fname: item.firstName,
             lname: item.lastName,
-            image: item.image ? config.get("APP_DOMAIN") + "public/images/profile-pic/" + item.image : config.get("APP_DOMAIN") + "public/images/images.png",
+            image: getUserProfileImage(item.image),
         }
         modifiedUserList.push(obj)
     })
@@ -56,9 +56,9 @@ router.post("/send", authenticate, async (req, res) => {
         return
     }
 
-    const friendRequest = await UserModel.findByIdAndUpdate(userId, {
+    const friendRequest = await UserModel.findByIdAndUpdate(secondUserId, {
         $addToSet: {
-            requests: secondUserId
+            requests: userId
         }
     }, { new: true })
     if (friendRequest) {

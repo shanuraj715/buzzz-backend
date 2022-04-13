@@ -1,12 +1,13 @@
 const express = require('express')
-const res = require('express/lib/response')
 const router = express.Router()
 const FeedModel = require('../Model/Feed')
 const auth = require('../Controller/Auth')
 const UserModel = require('../Model/User')
 const path = require('path')
+const config = require('config')
 
 const fs = require('fs')
+const authenticate = require('../middleware/authenticate')
 
 
 const months = {
@@ -24,9 +25,7 @@ const months = {
    "12": "December",
 }
 
-router.get('/post/:id', async (req, res) => {
-   const token = req.headers.authtoken
-   const uid = auth.verify(token).uid
+router.get('/post/:id', authenticate, async (req, res) => {
 
    const item = await FeedModel.findById(req.params.id)
    const user = await UserModel.findById(item.userId)
@@ -40,18 +39,19 @@ router.get('/post/:id', async (req, res) => {
       lname: user.lastName ?? "",
       username: user.username ?? "",
       userId: user._id ?? "",
-      email: user.email ?? ""
+      email: user.email ?? "",
+      thumb: getUserProfileImage(user.image)
    }
    // log(obj)
    let date = new Date(item.createdAt)
    let customObj = {
       authorId: item.userId,
       postAuthor: `${obj.fname} ${obj.lname}`,
-      authorThumb: "",
+      authorThumb: obj.thumb,
       postId: item._id,
       postDate: date.getDate() + '-' + months[(date.getMonth() + 1)] + "-" + date.getFullYear(),
       postText: item.postText,
-      postImage: "http://localhost:5000/public/images/feeds/" + item.media,
+      postImage: config.get("APP_DOMAIN") + 'public/images/feeds/' + item.media,
       likes: item.likes.length,
       dislikes: item.dislikes?.length ?? 0,
       comments: item.comments.length,
@@ -62,7 +62,7 @@ router.get('/post/:id', async (req, res) => {
    return
 })
 
-router.post('/', async (req, res, next) => {
+router.post('/', authenticate, async (req, res, next) => {
 
    const token = req.headers.authtoken
    const obj = auth.verify(token)
@@ -138,7 +138,7 @@ router.post('/', async (req, res, next) => {
 
 
 
-router.get('/', async (req, res, next) => {
+router.get('/', authenticate, async (req, res, next) => {
 
    // FETCH FRIENDS UID FROM USERS COLLECTION and store in a variable
    const token = req.headers.authtoken
@@ -187,12 +187,14 @@ router.get('/', async (req, res, next) => {
    }
    // console.log( data )
    users?.forEach(item => {
+      console.log(item)
       let obj = {
          fname: item.firstName ?? "",
          lname: item.lastName ?? "",
          username: item.username ?? "",
          userId: item._id ?? "",
-         email: item.email ?? ""
+         email: item.email ?? "",
+         thumb: getUserProfileImage(item.image)
       }
       userData[item._id] = obj
    })
@@ -205,16 +207,16 @@ router.get('/', async (req, res, next) => {
       let customObj = {
          authorId: item.userId,
          postAuthor: `${userData[item.userId].fname} ${userData[item.userId].lname}`,
-         authorThumb: "",
+         authorThumb: userData[item.userId].thumb,
          postId: item._id,
          postDate: date.getDate() + '-' + months[(date.getMonth() + 1)] + "-" + date.getFullYear(),
          postText: item.postText,
-         postImage: "http://localhost:5000/public/images/feeds/" + item.media,
+         postImage: config.get("APP_DOMAIN") + 'public/images/feeds/' + item.media,
          likes: item.likes.length,
          dislikes: item.dislikes?.length ?? 0,
          comments: item.comments.length,
-         commentList: item.comments
-
+         commentList: item.comments,
+         owner: userId === item.userId
       }
       myArr.push(customObj)
    })
@@ -223,7 +225,7 @@ router.get('/', async (req, res, next) => {
 })
 
 
-router.post("/response", async (req, res) => {
+router.post("/response", authenticate, async (req, res) => {
 
    const token = req.headers.authtoken
    const obj = auth.verify(token)
@@ -275,7 +277,7 @@ router.post("/response", async (req, res) => {
 
 })
 
-router.post('/delete/', async (req, res) => {
+router.post('/delete/', authenticate, async (req, res) => {
    const token = req.headers.authtoken
    const obj = auth.verify(token)
    const userId = obj.uid
@@ -301,9 +303,9 @@ router.post('/delete/', async (req, res) => {
       $set: {
          status: "deleted"
       }
-   }, {new: true})
+   }, { new: true })
 
-   console.log( result )
+   console.log(result)
    res.status(200).json({ status: true, message: "Post has been deleted" })
    return
 

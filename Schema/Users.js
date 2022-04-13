@@ -4,7 +4,7 @@ const validator = require('validator')
 const schema = new mongoose.Schema({
     firstName: {
         type: String,
-        minLength: 6,
+        minLength: 2,
         maxLength: 32,
         isRequired: true
     },
@@ -17,7 +17,8 @@ const schema = new mongoose.Schema({
         type: String,
         required: true,
         minLength: 6,
-        mxLength: 32
+        mxLength: 32,
+        unique: true
     },
     designation: {
         type: String,

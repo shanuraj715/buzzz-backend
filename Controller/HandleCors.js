@@ -2,7 +2,7 @@
 
 
 var allowedDomains = [
-    "http://localhost:3000"
+    "http://localhost:3000", 'https://mp3.techfacts007.in'
 ] // ['https://google.com', 'https://facebook.com']
 
 module.exports = function (req, callback) {
